@@ -21,7 +21,7 @@ class Operator:
     def add_task(self, task_name: str) -> str:
         current_time = datetime.now().strftime("%d.%m.%Y %H:%M")
         new_task = {'Name': task_name, "status": "-", 'date_creation': current_time, 'date_completion': '-'}
-        id = self._apoint_id()
+        id = self._appointment_id()
         self.data['Tasks'][id] = new_task
         self.put_data_bd()
         return id
@@ -34,13 +34,14 @@ class Operator:
 
     def delete_task(self, task_id: str):
         del self.data['Tasks'][task_id]
+        self.busy_id.remove(task_id)
         self.put_data_bd()
 
     def get_task(self, task_id: str) -> dict:
         task = self.data['Tasks'][task_id]
         return task
 
-    def _apoint_id(self) -> str:
+    def _appointment_id(self) -> str:
         id = "1"
         while id in self.busy_id:
             id = str(random.randint(1, 1000000))
